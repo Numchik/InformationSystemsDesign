@@ -1,18 +1,8 @@
 name: CI - Java (Lab2, Lab3)
 
 on:
-  push:
-    branches: [ main, master, develop ]
-    paths:
-      - 'Lab2_Platonov/**'
-      - 'Lab3_Sokolovskiy/**'
-      - '.github/workflows/ci-java.yml'
-  pull_request:
-    branches: [ main, master, develop ]
-    paths:
-      - 'Lab2_Platonov/**'
-      - 'Lab3_Sokolovskiy/**'
-      - '.github/workflows/ci-java.yml'
+  workflow_call:
+  workflow_dispatch:
 
 jobs:
   lab2:
