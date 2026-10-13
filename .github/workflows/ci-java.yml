@@ -1,0 +1,68 @@
+name: CI - Java (Lab2, Lab3)
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - 'Lab2_Platonov/'
+      - 'Lab3_Sokolovskiy/'
+      - '.github/workflows/ci-java.yml'
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - 'Lab2_Platonov/'
+      - 'Lab3_Sokolovskiy/'
+
+jobs:
+  # ----- Lab2: чистая Java без Maven -----
+  lab2:
+    name: Lab2 (Jelinski-Moranda, Java)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Lab2_Platonov
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Compile Java files
+        run: |
+          mkdir -p out
+          javac -d out src/*.java
+
+      - name: Run Main
+        run: java -cp out Main
+
+  # ----- Lab3: Maven-проект -----
+  lab3:
+    name: Lab3 (Halstead metrics, Maven)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Lab3_Sokolovskiy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B clean verify
+
+      - name: Upload surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab3-test-results
+          path: Lab3_Sokolovskiy/target/surefire-reports/
