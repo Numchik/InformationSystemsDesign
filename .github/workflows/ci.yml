@@ -1,0 +1,14 @@
+name: CI (all)
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  java:
+    uses: ./.github/workflows/ci-java.yml
+
+  python:
+    uses: ./.github/workflows/ci-python.yml
